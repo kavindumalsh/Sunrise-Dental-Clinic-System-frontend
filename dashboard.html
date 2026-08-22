@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sunrise Dental Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Sunrise Dental</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item" data-target="patients-section">Patients</a>
+            <a href="#" class="nav-item active" data-target="register-section">Register Appointment</a>
+            <a href="#" class="nav-item" data-target="search-section">Search & Billing</a>
+            <a href="#" class="nav-item" data-target="help-section">Help</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn btn-danger btn-block">Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <!-- Patients Section -->
+        <section id="patients-section" class="content-section" style="display: none;">
+            <div class="section-header">
+                <h2>Patient Management</h2>
+                <p>Register new patients and view the patient registry.</p>
+            </div>
+            <div class="card mb-2">
+                <h3>Register New Patient</h3>
+                <form id="patientForm" class="mt-1">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newPatientName">Patient Name</label>
+                            <input type="text" id="newPatientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newContactNumber">Contact Number</label>
+                            <input type="text" id="newContactNumber" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="newAddress">Address</label>
+                            <input type="text" id="newAddress" required>
+                        </div>
+                    </div>
+                    <div id="patientMsg" class="message"></div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Register Patient</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3>Patient Registry</h3>
+                <div class="table-container mt-1">
+                    <table class="table" id="patientsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Patient rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!-- Register Appointment Section -->
+        <section id="register-section" class="content-section active">
+            <div class="section-header">
+                <h2>Register New Appointment</h2>
+                <p>Enter patient and treatment details below.</p>
+            </div>
+            <div class="card">
+                <form id="registerForm">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="patientSelect">Select Patient</label>
+                            <select id="patientSelect" required>
+                                <option value="">Loading patients...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dentistName">Dentist Name</label>
+                            <input type="text" id="dentistName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="treatmentType">Treatment Type</label>
+                            <select id="treatmentType" required>
+                                <option value="">Select Treatment...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentDate">Appointment Date</label>
+                            <input type="date" id="appointmentDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentTime">Appointment Time</label>
+                            <input type="time" id="appointmentTime" required>
+                        </div>
+                    </div>
+                    <div id="registerMsg" class="message"></div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Register Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Search & Billing Section -->
+        <section id="search-section" class="content-section" style="display: none;">
+            <div class="section-header">
+                <h2>Search Appointment & Billing</h2>
+                <p>Find an appointment by its unique number.</p>
+            </div>
+            <div class="card search-card">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Enter Appointment Number (e.g., APP-12345678)">
+                    <button id="searchBtn" class="btn btn-primary">Search</button>
+                </div>
+                <div id="searchError" class="error-message mt-1" style="display: none;"></div>
+            </div>
+
+            <div id="appointmentDetails" class="card" style="display: none;">
+                <h3>Appointment Details</h3>
+                <div class="details-grid">
+                    <div class="detail-item"><strong>Appointment Number:</strong> <span id="dtl-number"></span></div>
+                    <div class="detail-item"><strong>Patient Name:</strong> <span id="dtl-name"></span></div>
+                    <div class="detail-item"><strong>Contact:</strong> <span id="dtl-contact"></span></div>
+                    <div class="detail-item"><strong>Dentist:</strong> <span id="dtl-dentist"></span></div>
+                    <div class="detail-item"><strong>Date:</strong> <span id="dtl-date"></span></div>
+                    <div class="detail-item"><strong>Time:</strong> <span id="dtl-time"></span></div>
+                </div>
+                <div class="mt-2">
+                    <button id="generateBillBtn" class="btn btn-success">Generate Bill</button>
+                </div>
+            </div>
+
+            <div id="billSection" class="card bill-card" style="display: none;">
+                <div class="bill-header">
+                    <h3>Sunrise Dental Clinic</h3>
+                    <p>Patient Receipt</p>
+                </div>
+                <div class="bill-content">
+                    <div class="bill-row"><span>Appointment No:</span> <strong id="bill-appno"></strong></div>
+                    <div class="bill-row"><span>Patient Name:</span> <strong id="bill-name"></strong></div>
+                    <div class="bill-row"><span>Treatment:</span> <strong id="bill-treatment"></strong></div>
+                    <hr>
+                    <div class="bill-row"><span>Treatment Cost:</span> <strong id="bill-tcost"></strong></div>
+                    <div class="bill-row"><span>Consultation Fee:</span> <strong id="bill-cfee"></strong></div>
+                    <hr>
+                    <div class="bill-row total"><span>Total Amount:</span> <strong id="bill-total"></strong></div>
+                </div>
+                <div class="bill-footer">
+                    <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Section -->
+        <section id="help-section" class="content-section" style="display: none;">
+            <div class="section-header">
+                <h2>Help & Instructions</h2>
+                <p>Step-by-step guide on using the Sunrise Dental Management System.</p>
+            </div>
+            <div class="card">
+                <h3>1. Registering an Appointment</h3>
+                <p>Navigate to the "Register Appointment" tab. Fill in all patient details including the treatment type and the scheduled date/time. Click "Register Appointment" to generate a unique Appointment Number.</p>
+                
+                <h3 class="mt-2">2. Searching & Billing</h3>
+                <p>Navigate to the "Search & Billing" tab. Enter the unique Appointment Number provided during registration. Once the details are displayed, click "Generate Bill" to calculate the total cost and print the receipt.</p>
+                
+                <h3 class="mt-2">3. Exiting the System</h3>
+                <p>To safely exit the application, click the "Logout" button located at the bottom of the sidebar. This will securely log you out and return you to the login screen.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
