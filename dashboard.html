@@ -3,186 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sunrise Dental Clinic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Dashboard — Sunrise Dental Clinic</title>
+    <meta name="description" content="Sunrise Dental Clinic dashboard for managing patients, appointments, billing, and treatments.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="app-layout">
+
+    <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
         <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a5 5 0 0 1 5 5c0 2-1.5 3.5-3 4.5V14h-4v-2.5C8.5 10.5 7 9 7 7a5 5 0 0 1 5-5z"/>
+                    <path d="M10 14v4a2 2 0 0 0 4 0v-4"/>
+                    <path d="M8 18h8"/>
+                    <path d="M9 22h6"/>
+                </svg>
+            </div>
             <h2>Sunrise Dental</h2>
         </div>
+
+        <div class="sidebar-label">Menu</div>
+
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item" data-target="patients-section">Patients</a>
-            <a href="#" class="nav-item active" data-target="register-section">Register Appointment</a>
-            <a href="#" class="nav-item" data-target="search-section">Search & Billing</a>
-            <a href="#" class="nav-item" data-target="help-section">Help</a>
+            <a href="#" class="nav-item active" data-target="register-section" data-title="Register Appointment" data-subtitle="Book a new patient appointment">
+                <span class="nav-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M12 14l2 2-2 2"/></svg>
+                </span>
+                Register Appointment
+            </a>
+            <a href="#" class="nav-item" data-target="patients-section" data-title="Patient Management" data-subtitle="Register and manage patient records">
+                <span class="nav-icon">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </span>
+                Patients
+            </a>
+            <a href="#" class="nav-item" data-target="search-section" data-title="Search & Billing" data-subtitle="Find appointments and generate invoices">
+                <span class="nav-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </span>
+                Search & Billing
+            </a>
+            <a href="#" class="nav-item" data-target="help-section" data-title="Help & Instructions" data-subtitle="User guide and system documentation">
+                <span class="nav-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </span>
+                Help
+            </a>
         </nav>
+
         <div class="sidebar-footer">
-            <button id="logoutBtn" class="btn btn-danger btn-block">Logout</button>
+            <div class="sidebar-user">
+                <div class="user-avatar">SD</div>
+                <div class="user-info">
+                    <div class="user-name">Staff User</div>
+                    <div class="user-role">Receptionist</div>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn btn-danger btn-block">
+                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign Out
+            </button>
         </div>
     </aside>
 
+    <!-- ========== MAIN CONTENT ========== -->
     <main class="main-content">
-        <!-- Patients Section -->
-        <section id="patients-section" class="content-section" style="display: none;">
-            <div class="section-header">
-                <h2>Patient Management</h2>
-                <p>Register new patients and view the patient registry.</p>
+
+        <!-- Top Header Bar -->
+        <div class="content-header" id="contentHeader">
+            <div>
+                <h2 id="pageTitle">Register Appointment</h2>
+                <p id="pageSubtitle">Book a new patient appointment</p>
             </div>
-            <div class="card mb-2">
-                <h3>Register New Patient</h3>
-                <form id="patientForm" class="mt-1">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="newPatientName">Patient Name</label>
-                            <input type="text" id="newPatientName" required>
+            <div class="header-actions">
+                <span class="badge badge-success"><span class="badge-dot"></span> System Online</span>
+            </div>
+        </div>
+
+        <div class="content-body">
+
+            <!-- ==================== REGISTER APPOINTMENT ==================== -->
+            <section id="register-section" class="content-section active">
+
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         </div>
-                        <div class="form-group">
-                            <label for="newContactNumber">Contact Number</label>
-                            <input type="text" id="newContactNumber" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="newAddress">Address</label>
-                            <input type="text" id="newAddress" required>
+                        <div>
+                            <div class="stat-value" id="statAppointments">—</div>
+                            <div class="stat-label">Appointments Today</div>
                         </div>
                     </div>
-                    <div id="patientMsg" class="message"></div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Register Patient</button>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="card">
-                <h3>Patient Registry</h3>
-                <div class="table-container mt-1">
-                    <table class="table" id="patientsTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Contact</th>
-                                <th>Address</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Patient rows will be injected here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-        <!-- Register Appointment Section -->
-        <section id="register-section" class="content-section active">
-            <div class="section-header">
-                <h2>Register New Appointment</h2>
-                <p>Enter patient and treatment details below.</p>
-            </div>
-            <div class="card">
-                <form id="registerForm">
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="patientSelect">Select Patient</label>
-                            <select id="patientSelect" required>
-                                <option value="">Loading patients...</option>
-                            </select>
+                    <div class="stat-card">
+                        <div class="stat-icon teal">
+                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                         </div>
-                        <div class="form-group">
-                            <label for="dentistName">Dentist Name</label>
-                            <input type="text" id="dentistName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="treatmentType">Treatment Type</label>
-                            <select id="treatmentType" required>
-                                <option value="">Select Treatment...</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="appointmentDate">Appointment Date</label>
-                            <input type="date" id="appointmentDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="appointmentTime">Appointment Time</label>
-                            <input type="time" id="appointmentTime" required>
+                        <div>
+                            <div class="stat-value" id="statPatients">—</div>
+                            <div class="stat-label">Total Patients</div>
                         </div>
                     </div>
-                    <div id="registerMsg" class="message"></div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Register Appointment</button>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="statTreatments">—</div>
+                            <div class="stat-label">Treatment Types</div>
+                        </div>
                     </div>
-                </form>
-            </div>
-        </section>
+                </div>
 
-        <!-- Search & Billing Section -->
-        <section id="search-section" class="content-section" style="display: none;">
-            <div class="section-header">
-                <h2>Search Appointment & Billing</h2>
-                <p>Find an appointment by its unique number.</p>
-            </div>
-            <div class="card search-card">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Enter Appointment Number (e.g., APP-12345678)">
-                    <button id="searchBtn" class="btn btn-primary">Search</button>
+                <div class="card">
+                    <h3>
+                        <span class="card-icon purple">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </span>
+                        New Appointment
+                    </h3>
+                    <p class="card-subtitle">Fill in the appointment details below to schedule a visit.</p>
+                    <form id="registerForm">
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="patientSelect">Select Patient</label>
+                                <select id="patientSelect" required>
+                                    <option value="">Loading patients...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dentistName">Dentist Name</label>
+                                <input type="text" id="dentistName" required placeholder="Dr. Smith">
+                            </div>
+                            <div class="form-group">
+                                <label for="treatmentType">Treatment Type</label>
+                                <select id="treatmentType" required>
+                                    <option value="">Select Treatment...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="appointmentDate">Appointment Date</label>
+                                <input type="date" id="appointmentDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="appointmentTime">Appointment Time</label>
+                                <input type="time" id="appointmentTime" required>
+                            </div>
+                        </div>
+                        <div id="registerMsg" class="message"></div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-ghost" onclick="this.closest('form').reset()">Clear</button>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                Register Appointment
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div id="searchError" class="error-message mt-1" style="display: none;"></div>
-            </div>
+            </section>
 
-            <div id="appointmentDetails" class="card" style="display: none;">
-                <h3>Appointment Details</h3>
-                <div class="details-grid">
-                    <div class="detail-item"><strong>Appointment Number:</strong> <span id="dtl-number"></span></div>
-                    <div class="detail-item"><strong>Patient Name:</strong> <span id="dtl-name"></span></div>
-                    <div class="detail-item"><strong>Contact:</strong> <span id="dtl-contact"></span></div>
-                    <div class="detail-item"><strong>Dentist:</strong> <span id="dtl-dentist"></span></div>
-                    <div class="detail-item"><strong>Date:</strong> <span id="dtl-date"></span></div>
-                    <div class="detail-item"><strong>Time:</strong> <span id="dtl-time"></span></div>
-                </div>
-                <div class="mt-2">
-                    <button id="generateBillBtn" class="btn btn-success">Generate Bill</button>
-                </div>
-            </div>
 
-            <div id="billSection" class="card bill-card" style="display: none;">
-                <div class="bill-header">
-                    <h3>Sunrise Dental Clinic</h3>
-                    <p>Patient Receipt</p>
-                </div>
-                <div class="bill-content">
-                    <div class="bill-row"><span>Appointment No:</span> <strong id="bill-appno"></strong></div>
-                    <div class="bill-row"><span>Patient Name:</span> <strong id="bill-name"></strong></div>
-                    <div class="bill-row"><span>Treatment:</span> <strong id="bill-treatment"></strong></div>
-                    <hr>
-                    <div class="bill-row"><span>Treatment Cost:</span> <strong id="bill-tcost"></strong></div>
-                    <div class="bill-row"><span>Consultation Fee:</span> <strong id="bill-cfee"></strong></div>
-                    <hr>
-                    <div class="bill-row total"><span>Total Amount:</span> <strong id="bill-total"></strong></div>
-                </div>
-                <div class="bill-footer">
-                    <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
-                </div>
-            </div>
-        </section>
+            <!-- ==================== PATIENTS ==================== -->
+            <section id="patients-section" class="content-section" style="display: none;">
 
-        <!-- Help Section -->
-        <section id="help-section" class="content-section" style="display: none;">
-            <div class="section-header">
-                <h2>Help & Instructions</h2>
-                <p>Step-by-step guide on using the Sunrise Dental Management System.</p>
-            </div>
-            <div class="card">
-                <h3>1. Registering an Appointment</h3>
-                <p>Navigate to the "Register Appointment" tab. Fill in all patient details including the treatment type and the scheduled date/time. Click "Register Appointment" to generate a unique Appointment Number.</p>
-                
-                <h3 class="mt-2">2. Searching & Billing</h3>
-                <p>Navigate to the "Search & Billing" tab. Enter the unique Appointment Number provided during registration. Once the details are displayed, click "Generate Bill" to calculate the total cost and print the receipt.</p>
-                
-                <h3 class="mt-2">3. Exiting the System</h3>
-                <p>To safely exit the application, click the "Logout" button located at the bottom of the sidebar. This will securely log you out and return you to the login screen.</p>
-            </div>
-        </section>
+                <div class="card mb-2">
+                    <h3>
+                        <span class="card-icon teal">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                        </span>
+                        Register New Patient
+                    </h3>
+                    <p class="card-subtitle">Add a new patient to the clinic records.</p>
+                    <form id="patientForm" class="mt-1">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="newPatientName">Patient Name</label>
+                                <input type="text" id="newPatientName" required placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="newContactNumber">Contact Number</label>
+                                <input type="text" id="newContactNumber" required placeholder="+94 77 123 4567">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="newAddress">Address</label>
+                                <input type="text" id="newAddress" required placeholder="Full residential address">
+                            </div>
+                        </div>
+                        <div id="patientMsg" class="message"></div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-ghost" onclick="this.closest('form').reset()">Clear</button>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                Register Patient
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>
+                        <span class="card-icon green">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </span>
+                        Patient Registry
+                    </h3>
+                    <p class="card-subtitle">Complete list of registered patients.</p>
+                    <div class="table-container mt-1">
+                        <table class="table" id="patientsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Contact Number</th>
+                                    <th>Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Patient rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ==================== SEARCH & BILLING ==================== -->
+            <section id="search-section" class="content-section" style="display: none;">
+
+                <div class="card search-card">
+                    <p class="search-title">Search Appointment</p>
+                    <p class="search-subtitle">Enter an appointment number to look up details and generate an invoice.</p>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="e.g. APP-12345678">
+                        <button id="searchBtn" class="btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Search
+                        </button>
+                    </div>
+                    <div id="searchError" class="error-message mt-1" style="display: none;"></div>
+                </div>
+
+                <div id="appointmentDetails" class="card" style="display: none;">
+                    <h3>
+                        <span class="card-icon purple">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        </span>
+                        Appointment Details
+                    </h3>
+                    <div class="details-grid">
+                        <div class="detail-item"><strong>Appointment No.</strong> <span id="dtl-number"></span></div>
+                        <div class="detail-item"><strong>Patient Name</strong> <span id="dtl-name"></span></div>
+                        <div class="detail-item"><strong>Contact</strong> <span id="dtl-contact"></span></div>
+                        <div class="detail-item"><strong>Dentist</strong> <span id="dtl-dentist"></span></div>
+                        <div class="detail-item"><strong>Date</strong> <span id="dtl-date"></span></div>
+                        <div class="detail-item"><strong>Time</strong> <span id="dtl-time"></span></div>
+                    </div>
+                    <div class="form-actions mt-2">
+                        <button id="generateBillBtn" class="btn btn-success">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            Generate Invoice
+                        </button>
+                    </div>
+                </div>
+
+                <div id="billSection" class="card bill-card" style="display: none;">
+                    <div class="bill-header">
+                        <div class="bill-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a5 5 0 0 1 5 5c0 2-1.5 3.5-3 4.5V14h-4v-2.5C8.5 10.5 7 9 7 7a5 5 0 0 1 5-5z"/>
+                                <path d="M10 14v4a2 2 0 0 0 4 0v-4"/>
+                                <path d="M8 18h8"/>
+                                <path d="M9 22h6"/>
+                            </svg>
+                        </div>
+                        <h3>Sunrise Dental Clinic</h3>
+                        <p>Patient Invoice / Receipt</p>
+                    </div>
+                    <div class="bill-content">
+                        <div class="bill-row"><span>Appointment No.</span> <strong id="bill-appno"></strong></div>
+                        <div class="bill-row"><span>Patient Name</span> <strong id="bill-name"></strong></div>
+                        <div class="bill-row"><span>Treatment</span> <strong id="bill-treatment"></strong></div>
+                        <hr>
+                        <div class="bill-row"><span>Treatment Cost</span> <strong id="bill-tcost"></strong></div>
+                        <div class="bill-row"><span>Consultation Fee</span> <strong id="bill-cfee"></strong></div>
+                        <hr>
+                        <div class="bill-row total"><span>Total Amount</span> <strong id="bill-total"></strong></div>
+                    </div>
+                    <div class="bill-footer">
+                        <button class="btn btn-ghost" onclick="window.print()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            Print Receipt
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ==================== HELP ==================== -->
+            <section id="help-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <h3>
+                        <span class="card-icon purple">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </span>
+                        User Guide
+                    </h3>
+                    <p class="card-subtitle">Follow these steps to use the Sunrise Dental Management System.</p>
+                    <div class="help-cards">
+                        <div class="help-step">
+                            <div class="help-step-number">1</div>
+                            <div class="help-step-content">
+                                <h3>Register a Patient</h3>
+                                <p>Navigate to the <strong>Patients</strong> section from the sidebar. Fill in the patient's full name, contact number, and address, then click <strong>Register Patient</strong>. The patient will immediately appear in the registry table and become available in the appointment form.</p>
+                            </div>
+                        </div>
+                        <div class="help-step">
+                            <div class="help-step-number">2</div>
+                            <div class="help-step-content">
+                                <h3>Book an Appointment</h3>
+                                <p>Go to <strong>Register Appointment</strong>. Select a patient, choose the dentist, pick a treatment type, and set the date and time. Click <strong>Register Appointment</strong> to receive a unique Appointment Number (e.g., APP-12345678).</p>
+                            </div>
+                        </div>
+                        <div class="help-step">
+                            <div class="help-step-number">3</div>
+                            <div class="help-step-content">
+                                <h3>Search & Generate Invoice</h3>
+                                <p>Open <strong>Search & Billing</strong>. Enter the Appointment Number to retrieve the full appointment details. Click <strong>Generate Invoice</strong> to calculate the total cost (treatment + consultation fee), then use <strong>Print Receipt</strong> to print the invoice.</p>
+                            </div>
+                        </div>
+                        <div class="help-step">
+                            <div class="help-step-number">4</div>
+                            <div class="help-step-content">
+                                <h3>Sign Out Securely</h3>
+                                <p>When you're done, click <strong>Sign Out</strong> at the bottom of the sidebar. This removes your session token and returns you to the login page securely.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
     </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script src="js/api.js"></script>
     <script src="js/app.js"></script>
