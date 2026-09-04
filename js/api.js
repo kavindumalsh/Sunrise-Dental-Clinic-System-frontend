@@ -164,4 +164,19 @@ class ApiService {
     static verifyBill(appNo) {
         return this.request(`/reports/bill-verification?appointmentNumber=${encodeURIComponent(appNo)}`);
     }
+
+    static listUsers() {
+        return this.request('/users');
+    }
+
+    static createUser(data) {
+        return this.request('/users', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    static deleteUser(id) {
+        return this.request(`/users/${id}`, { method: 'DELETE' });
+    }
 }

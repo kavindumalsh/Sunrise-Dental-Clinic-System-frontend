@@ -18,22 +18,32 @@ assessment brief's scenario.
 * `js/app.js` - DOM wiring, form handling, validation feedback, and the Reports charts
 
 ## Functionality by dashboard section
-1. **Register Appointment** - patient/dentist/treatment/date/time form with live stat tiles.
+1. **Overview** - the landing page after sign-in: a greeting banner, KPI tiles (today's
+   appointments, total patients, upcoming appointments, and - for admins - revenue this month),
+   one-click Quick Actions into every other section, and the five most recently booked
+   appointments.
+2. **Register Appointment** - patient/dentist/treatment/date/time form with live stat tiles.
    Booking is restricted to the clinic's actual opening hours and days by the backend
    (08:00-17:30, Monday-Saturday); rejections (including double-booking, HTTP 409) surface as
    inline messages and toast notifications.
-2. **Patients** - register a patient (name, address, phone, optional email - the email enables
+3. **Patients** - register a patient (name, address, phone, optional email - the email enables
    simulated confirmation emails) and view the full registry table.
-3. **Search & Billing** - look up an appointment by number, view its status, **cancel** it
+4. **Appointments** - look up an appointment by number, view its status, **cancel** it
    (kept as history, not deleted), generate an itemised invoice (with any loyalty discount shown
    and explained), print it, and - for administrators - **verify the bill independently** against
-   the database's own `sp_calculate_bill` stored procedure.
-4. **Reports** (administrators only - hidden from the nav entirely for receptionist accounts) -
+   the database's own `sp_calculate_bill` stored procedure. Below that, an **All Appointments**
+   table (filterable by status) lets staff browse every booking and click any row to load it.
+5. **Reports** (administrators only - hidden from the nav entirely for receptionist accounts) -
    KPI tiles plus three Chart.js visualisations (revenue by treatment, a 14-day appointment
    trend, dentist workload) fed by the backend's `/api/reports/*` endpoints, and a form to add
    new treatment types to the price list.
-5. **Help** - step-by-step instructions for new staff, kept in sync with the features above.
-6. **Sign Out** - calls `POST /api/auth/logout` (invalidating the session server-side) before
+6. **Staff Accounts** (administrators only) - create new staff logins (receptionist or admin
+   role) and remove accounts that are no longer needed. There is deliberately no public
+   registration page; this is the only way a new account is created, and an admin cannot delete
+   their own account or the last remaining administrator (both enforced server-side, not just
+   hidden in the UI).
+7. **Help** - step-by-step instructions for new staff, kept in sync with the features above.
+8. **Sign Out** - calls `POST /api/auth/logout` (invalidating the session server-side) before
    clearing local storage and returning to the login screen.
 
 ## Architecture
