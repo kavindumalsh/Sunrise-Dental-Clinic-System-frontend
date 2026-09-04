@@ -1407,3 +1407,55 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ============================================================
+   REPORTS / CHARTS
+   ============================================================ */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-wrap {
+    position: relative;
+    height: 260px;
+    margin-top: 12px;
+}
+
+.badge-danger {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+.optional-label {
+    font-weight: 400;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.discount-amount {
+    color: var(--success);
+}
+
+.verify-result {
+    margin: 0 24px 20px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--border-light);
+    border: 1px solid var(--border);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.bill-card code,
+.card-subtitle code {
+    background: var(--border-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+}

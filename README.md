@@ -1,39 +1,55 @@
 # Sunrise Dental Clinic System - Frontend
 
 ## Overview
-This is the frontend component of the Sunrise Dental Clinic System. It is an interactive, menu-driven web application designed for clinic staff to efficiently manage patient records, appointments, and billing. It solves the issues of double bookings, lost records, and billing errors caused by manual paper-based processes.
+An interactive, menu-driven web client for clinic staff, consuming the `backend/` REST API.
+Solves the double bookings, lost records, long waits, and billing errors described in the
+assessment brief's scenario.
 
 ## Technology Stack
-* **HTML5:** Semantic structure for user interfaces.
-* **CSS3:** Custom styling for a clean, user-friendly, and responsive design tailored to clinic staff needs.
-* **JavaScript (Vanilla):** Client-side logic, form validation, and asynchronous communication (`fetch` API) with the Java backend web services.
-
-## Functionalities Covered
-The frontend UI ensures all system requirements outlined in the brief are seamlessly integrated:
-1. **User Authentication (Login):** Secure login interface (`index.html`) requiring a valid username and password. Stores the JWT token for secure session management.
-2. **Register New Appointment:** A comprehensive form in the dashboard to input patient details (Name, Address, Contact) and appointment specifics (Dentist, Treatment, Date, Time). Includes rigorous client-side validation to restrict invalid entries.
-3. **Display Appointment Details:** A dedicated section to search for an appointment by its unique appointment number and immediately display the complete patient and appointment record.
-4. **Calculate and Print Bill:** An interface to generate bills/receipts, displaying the dynamically calculated total treatment costs (treatment fee + consultation) fetched from the backend. Includes an option to print the receipt.
-5. **Help Section:** Provides a dedicated section with step-by-step instructions and guidance for new staff on how to navigate and use the system effectively.
-6. **Exit System:** A secure logout/exit option that clears local session data and safely returns the user to the login screen, closing the current active session.
+* **HTML5 / CSS3** - semantic structure and a custom, responsive design system (`css/styles.css`)
+* **JavaScript (vanilla)** - no framework; `fetch` for API calls, DOM APIs for rendering
+* **Chart.js** (via CDN) - the admin Reports charts
 
 ## Project Structure
-* `index.html`: The entry point and login interface for the system.
-* `dashboard.html`: The main interactive portal for all clinic operations, divided into intuitive menu sections for each functionality.
-* `css/styles.css`: Contains all visual styles, providing a cohesive and user-friendly visual experience.
-* `js/app.js`: Contains the main application logic, DOM manipulation, and UI event handling.
-* `js/api.js`: Handles all HTTP requests (GET, POST), communicating securely with the backend API by attaching the JWT authorization header.
+* `index.html` - staff login (issues a JWT + an HttpOnly session cookie on success)
+* `dashboard.html` - the main application shell: sidebar navigation between five sections
+* `css/styles.css` - all visual styling
+* `js/api.js` - `ApiService`: every HTTP call to the backend, JWT + session-cookie handling
+* `js/app.js` - DOM wiring, form handling, validation feedback, and the Reports charts
+
+## Functionality by dashboard section
+1. **Register Appointment** - patient/dentist/treatment/date/time form with live stat tiles.
+   Booking is restricted to the clinic's actual opening hours and days by the backend
+   (08:00-17:30, Monday-Saturday); rejections (including double-booking, HTTP 409) surface as
+   inline messages and toast notifications.
+2. **Patients** - register a patient (name, address, phone, optional email - the email enables
+   simulated confirmation emails) and view the full registry table.
+3. **Search & Billing** - look up an appointment by number, view its status, **cancel** it
+   (kept as history, not deleted), generate an itemised invoice (with any loyalty discount shown
+   and explained), print it, and - for administrators - **verify the bill independently** against
+   the database's own `sp_calculate_bill` stored procedure.
+4. **Reports** (administrators only - hidden from the nav entirely for receptionist accounts) -
+   KPI tiles plus three Chart.js visualisations (revenue by treatment, a 14-day appointment
+   trend, dentist workload) fed by the backend's `/api/reports/*` endpoints, and a form to add
+   new treatment types to the price list.
+5. **Help** - step-by-step instructions for new staff, kept in sync with the features above.
+6. **Sign Out** - calls `POST /api/auth/logout` (invalidating the session server-side) before
+   clearing local storage and returning to the login screen.
 
 ## Architecture
-This frontend acts as the client side of a **distributed application**. It consumes RESTful web services provided by the Java backend, adhering to a clear client-server architecture model.
+Pure client-server: this is the presentation tier of the three-tier architecture described in
+`backend/README.md`. `ApiService.request()` is the single chokepoint for every call - it attaches
+the JWT bearer header, sends the session cookie (`credentials: 'include'`), and redirects to the
+login page on a 401. Role (`ROLE_ADMIN` / `ROLE_RECEPTIONIST`), returned at login, is stored
+client-side and used only to show/hide UI (the backend independently enforces the same
+restriction on every request - the frontend check is a convenience, not the security boundary).
 
 ## How to Run
-Since this is a static frontend communicating with a REST API, it does not require a complex build process:
-1. Ensure the **Java backend** is running and the database is connected.
-2. Serve the `frontend` folder using any local web server (e.g., Live Server extension in VS Code, Python's `http.server`, or Node's `http-server`).
+1. Start the backend first (see `backend/README.md`) - it must be listening on
+   `http://localhost:8080`.
+2. Serve this folder with any static file server, e.g.:
    ```bash
-   # Example using Python (run this inside the frontend directory)
    python -m http.server 8000
    ```
-3. Open a web browser and navigate to `http://localhost:8000/index.html`.
-4. Log in using the authorized staff credentials.
+3. Open `http://localhost:8000/index.html` and sign in with a seeded account (see
+   `database/data.sql`): `admin` / `admin123` or `reception` / `reception123`.

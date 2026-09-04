@@ -13,6 +13,32 @@ class ApiService {
         localStorage.removeItem('jwt_token');
     }
 
+    static getRole() {
+        return localStorage.getItem('user_role');
+    }
+
+    static setRole(role) {
+        localStorage.setItem('user_role', role);
+    }
+
+    static getUsername() {
+        return localStorage.getItem('username');
+    }
+
+    static setUsername(username) {
+        localStorage.setItem('username', username);
+    }
+
+    static isAdmin() {
+        return this.getRole() === 'ROLE_ADMIN';
+    }
+
+    static clearSession() {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('username');
+    }
+
     static async request(endpoint, options = {}) {
         const headers = {
             'Content-Type': 'application/json',
@@ -24,15 +50,18 @@ class ApiService {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
+        // include: sends the SDCSESSION HttpOnly cookie set on login, so the server-side
+        // session path (SessionManager) is exercised in addition to the JWT bearer header.
         const config = {
             ...options,
-            headers
+            headers,
+            credentials: 'include'
         };
 
         try {
             const response = await fetch(`${API_URL}${endpoint}`, config);
             const text = await response.text();
-            
+
             let data;
             try {
                 data = text ? JSON.parse(text) : {};
@@ -42,10 +71,12 @@ class ApiService {
 
             if (!response.ok) {
                 if (response.status === 401 && !endpoint.includes('/auth/login')) {
-                    this.removeToken();
+                    this.clearSession();
                     window.location.href = 'index.html';
                 }
-                throw new Error(data.error || 'API Request Failed');
+                const error = new Error(data.error || 'API Request Failed');
+                error.status = response.status;
+                throw error;
             }
 
             return data;
@@ -62,8 +93,21 @@ class ApiService {
         });
     }
 
+    static logout() {
+        return this.request('/auth/logout', { method: 'POST' }).catch(() => {
+            // Best effort - the local session is cleared regardless of whether this call succeeds.
+        });
+    }
+
     static getTreatments() {
         return this.request('/treatments');
+    }
+
+    static createTreatment(data) {
+        return this.request('/treatments', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
     }
 
     static getPatients() {
@@ -90,5 +134,34 @@ class ApiService {
 
     static getBill(appNo) {
         return this.request(`/appointments/${appNo}/bill`, { method: 'GET' });
+    }
+
+    static cancelAppointment(appNo) {
+        return this.request(`/appointments/${appNo}/cancel`, { method: 'POST' });
+    }
+
+    static listAppointments(params = {}) {
+        const query = new URLSearchParams(params).toString();
+        return this.request(`/appointments${query ? `?${query}` : ''}`);
+    }
+
+    static getReportSummary() {
+        return this.request('/reports/summary');
+    }
+
+    static getRevenueByTreatment() {
+        return this.request('/reports/revenue-by-treatment');
+    }
+
+    static getAppointmentsByDay(days = 14) {
+        return this.request(`/reports/appointments-by-day?days=${days}`);
+    }
+
+    static getDentistWorkload() {
+        return this.request('/reports/dentist-workload');
+    }
+
+    static verifyBill(appNo) {
+        return this.request(`/reports/bill-verification?appointmentNumber=${encodeURIComponent(appNo)}`);
     }
 }
